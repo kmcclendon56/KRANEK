@@ -140,74 +140,38 @@ class FlashcardDelete(DeleteView):
 #========================================== My quizzes view ======================================================#
 
 
-@login_required
-def add_quiz(request, profile_id):
-    form = QuizForm(request.POST)
-    if form.is_valid():
-        new_quiz = form.save(commit=False)
-        new_quiz.profile_id = profile_id
-        new_quiz.save()
-    return redirect('detail', profile_id=profile_id)
-
-
-@login_required
-def quiz_detail(request, quiz_id):
-    quiz = Quiz.objects.get(id=quiz_id)
-    quiz_form = QuizForm()
-    questions = Question.objects.filter(quiz=quiz)
-    return render(request, 'quiz/detail.html', {
-        'quiz': quiz,
-        'quiz_form': quiz_form,
-        'questions': questions,
-    })
-
-
-@login_required
-def quizUpdate(request, UpdateView):
+class QuizCreate(LoginRequiredMixin, CreateView):
     model = Quiz
     fields = ['title']
-# Use this if above doesnt work
+    def form_valid(self, form):
+      form.instance.user = self.request.user
+      return super().form_valid(form)
 
 
-def quiz_update(request, profile_id):
-    form = QuizForm(request.POST)
-    if form.is_valid():
-        new_quiz = form.save(commit=False)
-        new_quiz.profile_id = profile_id
-        new_quiz.save()
-    return redirect('detail', profile_id=profile_id)
+class QuizUpdate(LoginRequiredMixin, UpdateView):
+    model = Quiz
+    fields = '__all__'
 
 
-@login_required
-def quizDelete(request, DeleteView):
+class QuizDelete(LoginRequiredMixin, DeleteView):
     model = Quiz
     success_url = '/quiz/'
 
 
 @login_required
-def add_question(request, quiz_id,):
-    form = QuestionForm(request.Post)
-    if form.is_valid():
-        new_question = form.save(commit=False)
-        new_question.quiz_id = quiz_id
-        new_question.save()
-    return redirect('details', quiz_id=quiz_id)
-# Use this if above doesnt work
-
-
-def add_question(request, quiz_id, question_id):
-    Quiz.objects.get(id=quiz_id).question.add(question_id)
-    return redirect('detail', quiz_id=quiz_id)
+def quiz_index(request):
+    quiz = quiz.objects.all()
+    return render(request, 'quiz/index.html', {'quiz': quiz})
 
 
 @login_required
-def remove_question(request, quiz_id, question_id):
-    Quiz.objects.get(id+quiz_id).question.remove(question_id)
-    return redirect('detail', quiz_id=quiz_id)
+def quiz_detail(request, quiz_id):
+    quiz = Quiz.objects.get(id=quiz_id)
+    return render(request, 'quiz/detail.html', {'quiz: quiz'})
 
 
 @login_required
-def question_update(request, UpdateView, quiz_id):
+def add_question(request, quiz_id):
     form = QuestionForm(request.POST)
     if form.is_valid():
         new_question = form.save(commit=False)
@@ -217,13 +181,184 @@ def question_update(request, UpdateView, quiz_id):
 
 
 @login_required
-def question_delete(request, DeleteView, quiz_id):
-    form = QuestionForm(request.Delete)
-    if form.is_valid():
-        new_question = form.save(commit=False)
-        new_question.quiz_id = quiz_id
-        new_question.remove()
+def assoc_question(request, quiz_id, question_id):
+    Quiz.objects.get(id=quiz_id).question.add(question_id)
     return redirect('detail', quiz_id=quiz_id)
+
+
+@login_required
+def unassoc_question(request, quiz_id, question_id):
+    Quiz.objects.get(id=quiz_id).question.remove(question_id)
+    return redirect('detail', quiz_id=quiz_id)
+
+
+class QuestionList(LoginRequiredMixin, ListView):
+    model = Question
+
+
+class QuestionDetail(LoginRequiredMixin, DetailView):
+    model = Question
+
+
+class QuestionCreate(LoginRequiredMixin, CreateView):
+    model = Question
+    fields = '__all__'
+
+
+class QuestionUpdate(LoginRequiredMixin, UpdateView):
+    model = Question
+    fields = '__all__'
+
+
+class QuestionDelete(LoginRequiredMixin, DeleteView):
+    model = Question
+    success_url = '/Question/'
+
+
+# @login_required
+# def quiz_index(request):
+#     quiz = quiz.objects.all()
+#     return render(request, 'quiz/index.html', {'quiz': quiz})
+
+
+# @login_required
+# def quiz_detail(request, quiz_id):
+#     quiz = Quiz.objects.get(id=quiz_id)
+#     return render(request, 'quiz/detail.html', {'quiz: quiz'})
+
+
+# @login_required
+# def assoc_question(request, quiz_id, question_id):
+#     Quiz.objects.get(id=quiz_id).question.add(question_id)
+#     return redirect('detail', quiz_id=quiz_id)
+
+
+# class QuizCreate(LoginRequiredMixin, CreateView):
+#     model = Quiz
+#     fields = ['title']
+#     success_url = ['/quiz/']
+
+
+# class QuizUpdate(LoginRequiredMixin, UpdateView):
+#     model = Quiz
+#     fields = '__all__'
+
+
+# class QuizDelete(LoginRequiredMixin, DeleteView):
+#     model = Quiz
+#     success_url = '/quiz/'
+
+
+# class QuestionList(LoginRequiredMixin, ListView):
+#     model = Question
+
+
+# class QuestionDetail(LoginRequiredMixin, DetailView):
+#     model = Question
+
+
+# class QuestionCreate(LoginRequiredMixin, CreateView):
+#     model = Question
+#     fields = '__all__'
+
+
+# class QuestionUpdate(LoginRequiredMixin, UpdateView):
+#     model = Question
+#     fields = '__all__'
+
+
+# class QuestionDelete(LoginRequiredMixin, DeleteView):
+#     model = Question
+#     success_url = '/Question/'
+
+
+# If below doesnt work lets use above
+
+# @login_required
+# def add_quiz(request, profile_id):
+#     form = QuizForm(request.POST)
+#     if form.is_valid():
+#         new_quiz = form.save(commit=False)
+#         new_quiz.profile_id = profile_id
+#         new_quiz.save()
+#     return redirect('detail', profile_id=profile_id)
+
+
+# @login_required
+# def quiz_detail(request, quiz_id):
+#     quiz = Quiz.objects.get(id=quiz_id)
+#     quiz_form = QuizForm()
+#     questions = Question.objects.filter(quiz=quiz)
+#     return render(request, 'quiz/detail.html', {
+#         'quiz': quiz,
+#         'quiz_form': quiz_form,
+#         'questions': questions,
+#     })
+
+# #might need to make this into a class to work
+# @login_required
+# def quiz_update(request, profile_id):
+#     form = QuizForm(request.POST)
+#     if form.is_valid():
+#         new_quiz = form.save(commit=False)
+#         new_quiz.profile_id = profile_id
+#         new_quiz.save()
+#     return redirect('detail', profile_id=profile_id)
+
+
+# # @login_required
+# # class QuizDelete(LoginRequiredMixin, DeleteView):
+# #     model = Quiz
+# #     success_url = '/quiz/'
+# #if above doesnt work
+# @login_required
+# def quiz_delete(request, profile_id):
+#     form = QuizForm(request.Delete)
+#     if form.is_valid():
+#         new_quiz = form.save(commit=False)
+#         new_quiz.profile_id = profile_id
+#         new_quiz.save()
+#     return redirect('detail', profile_id=profile_id)
+
+
+# @login_required
+# def add_question(request, quiz_id,):
+#     form = QuestionForm(request.Post)
+#     if form.is_valid():
+#         new_question = form.save(commit=False)
+#         new_question.quiz_id = quiz_id
+#         new_question.remove()
+#     return redirect('details', quiz_id=quiz_id)
+# # Use this if above doesnt work
+# # def add_question(request, quiz_id, question_id):
+# #     Quiz.objects.get(id=quiz_id).question.add(question_id)
+# #     return redirect('detail', quiz_id=quiz_id)
+
+
+# @login_required
+# def remove_question(request, quiz_id, question_id):
+#     Quiz.objects.get(id+quiz_id).question.remove(question_id)
+#     return redirect('detail', quiz_id=quiz_id)
+
+
+# @login_required
+# def question_update(request, UpdateView, quiz_id):
+#     form = QuestionForm(request.POST)
+#     if form.is_valid():
+#         new_question = form.save(commit=False)
+#         new_question.quiz_id = quiz_id
+#         new_question.save()
+#     return redirect('detail', quiz_id=quiz_id)
+
+
+# @login_required
+# def question_delete(request, DeleteView, quiz_id):
+#     form = QuestionForm(request.Delete)
+#     if form.is_valid():
+#         new_question = form.save(commit=False)
+#         new_question.quiz_id = quiz_id
+#         new_question.remove()
+#     return redirect('detail', quiz_id=quiz_id)
 
 
 #============================================= Inserting a photo ===================================================#
