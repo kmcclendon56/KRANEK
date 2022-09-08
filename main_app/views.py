@@ -154,7 +154,7 @@ class QuizUpdate(LoginRequiredMixin, UpdateView):
 
 class QuizDelete(LoginRequiredMixin, DeleteView):
     model = Quiz
-    success_url = '/quizzes/'
+    success_url = '/quiz/'
 
 
 @login_required
