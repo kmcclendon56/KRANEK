@@ -478,7 +478,15 @@ nav {
   box-shadow: 2px 2px 4px black;
 }
 
+.add_col{
+  display: flex;
+  flex-direction: row;
+}
 
+.avaliable_col{
+  display: flex;
+  flex-direction: row;
+}
 
 
 /* KeiLee */
@@ -487,7 +495,7 @@ nav {
   background-color: transparent;
   width: 300px;
   height: 200px;
-  border: 1px solid #f1f1f1;
+  border: 1px solid white;
   perspective: 1000px; /* Remove this if you don't want the 3D effect */
 }
 
@@ -498,26 +506,26 @@ nav {
   text-align: center;
   transition: transform 0.8s;
   transform-style: preserve-3d;
-}
+} 
 
 .flip-card:hover .flip-card-inner {
   transform: rotateY(180deg);
 }
 
-/* Position the front and back side */
+/* Position the front and back side  */
 .flip-card-front, .flip-card-back {
   position: absolute;
   width: 100%;
   height: 100%;
   -webkit-backface-visibility: hidden; /* Safari */
   backface-visibility: hidden;
-}
+} 
 
 /* Style the front side (fallback if image is missing) */
 .flip-card-front {
-  background-color: #bbb;
-  color: black;
-}
+  background-color: rgb(29, 131, 233);
+  color: white;
+} 
 
 /* Style the back side */
 .flip-card-back {

@@ -62,7 +62,7 @@ def signup(request):
 
 
 def home(request):
-    return HttpResponse('<h1>༼ つ ◕_◕ ༽つ SUMMON THE KRAKEN ༼ つ ◕_◕ ༽つ</h1>')
+    return render(request, 'home.html')
 
 
 def about(request):

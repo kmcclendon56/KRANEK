@@ -16,8 +16,8 @@
       </div>
     </div>
     <!-- Questions Added -->
-    <hr>
-    <div class="row">
+    
+    <div class="add-col">
       <div class="col s6">
         <h3>{{ quiz.title }}'s Questions</h3>
         {% if quiz.questions.count %}
@@ -37,37 +37,38 @@
               </div>
             </div>
           </div>
-          {% endfor %}
-          {% else %}
-          <h5>No Questions Avaliable</h5>
-          {% endif %}
         </div>
-        <!-- Avaliable Questions -->
-        <div class="col s6">
-          <h3>Available Questions</h3>
-          {% if questions.count %}
-          {% for question in questions.all %}
-          <div class="card">
-            <div class="card-content">
-              <span class="card-title">
-                {{ question.question }}
-              </span>
-            </div>
-            <div class="card-action">
-              <form action="{% url 'assoc_question' quiz.id question.id %}" method="post">
-                {% csrf_token %}
-                <button type="submit" class="btn">Add</button>
-              </form>
-            </div>
+        {% endfor %}
+        {% else %}
+        <h5>No Questions Avaliable</h5>
+        {% endif %}
+      </div>
+    </div>
+    <!-- Avaliable Questions -->
+    <div class="avaliable-col">
+      <div class="col s6">
+        <h3>Available Questions</h3>
+        {% if questions.count %}
+        {% for question in questions.all %}
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">
+              {{ question.question }}
+            </span>
           </div>
-          {% endfor %}
-          {% else %}
-          <h5> No More Questions to Add for {{quiz.title}}</h5>
-          {% endif %}
+          <div class="card-action">
+            <form action="{% url 'assoc_question' quiz.id question.id %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-info">Add</button>
+            </form>
+          </div>
         </div>
+        {% endfor %}
+        {% else %}
+        <h5> No More Questions to Add for {{quiz.title}}</h5>
+        {% endif %}
       </div>
     </div>
   </div>
-  {% endblock %}
-
 </div>
+{% endblock %}
