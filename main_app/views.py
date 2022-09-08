@@ -115,7 +115,6 @@ def assoc_flashcard(request, deck_id, flashcard_id):
 class DeckCreate(CreateView):
     model = Deck
     fields = ['name', 'subject']
-    success_url = ['/decks/']
 
 
 class DeckUpdate(UpdateView):
